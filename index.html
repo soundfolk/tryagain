@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"
+        integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <form action="" class="forms">
+            <input type="text" id="pop">
+            <input type="submit" id="Click" value="Click">
+        </form>
+        <div class="link">
+            <h1></h1>
+        </div>
+        <h6>I made this site to help </h6>
+    </div>
+</body>
+<script>
+    var socket = io();
+
+    const form = document.querySelector(".forms")
+
+    const test = document.getElementById("pop")
+
+    const cont = document.querySelector(".container")
+    function app(join) {
+        const mess = document.createElement("div")
+        mess.innerText = join
+        cont.append(mess)
+    }
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        const mes = test.value
+        app(`You : ${mes}`)
+        socket.emit("send", mes)
+    })
+
+
+    const name = prompt("Enter the name")
+    socket.emit("join", name)
+
+    socket.on("userJoined", (name) => {
+        app(`${name} has joined`)
+    })
+
+    socket.on("recv", data => {
+        app(`${data.names} :${data.mess}`)
+    })
+</script>
+
+</html>
